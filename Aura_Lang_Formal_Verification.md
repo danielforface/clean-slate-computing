@@ -129,17 +129,22 @@ The compiler walks the CFG sequentially, updating an internal tracking ledger (`
 ```
 
 ### 3.2 Mathematical Enforcement of Asset Conservation
+
 Linear values (such as physical I/O descriptors, raw tensor allocation slots, or high-bandwidth network ports) are treated as physical assets. The verification engine converts ownership transitions into logic verification formulas:
 
-1.  **Instantiation Invariant:** When a linear asset is initialized, the tracking compiler asserts its resource allocation footprint inside the current execution sequence:
-    $$	ext{Asset}_{	ext{State}}(x) = 	ext{Owned}$$
-2.  **Move Invariance:** When passed to an asynchronous execution strand or another function structure, the local context passes ownership completely, marking the target variable dead:
-    $$	ext{Asset}_{	ext{State}}(x) \longrightarrow 	ext{Moved}$$
-3.  **Path Convergence and Fork Invariance:** When branches intersect (e.g., if-else matrices), the verification framework verifies both paths match perfectly. If variable $x$ is moved inside the true branch but remains active inside the false branch, the states diverge:
-    $$	ext{Branch}_{	ext{True}}(x) 
-eq 	ext{Branch}_{	ext{False}}(x)$$
-    This state discrepancy violates conservation rules. The compiler blocks compilation and provides clear diagnostics to prevent runtime state corruption.
+1. **Instantiation Invariant:** When a linear asset is initialized, the tracking compiler asserts its resource allocation footprint inside the current execution sequence:
 
+  $$\text{Asset}_{\text{State}}(x) = \text{Owned}$$
+
+2. **Move Invariance:** When passed to an asynchronous execution strand or another function structure, the local context passes ownership completely, marking the target variable dead:
+
+  $$\text{Asset}_{\text{State}}(x) \to \text{Moved}$$
+
+3. **Path Convergence and Fork Invariance:** When branches intersect (e.g., if-else matrices), the verification framework verifies both paths match perfectly. If variable $x$ is moved inside the true branch but remains active inside the false branch, the states diverge:
+
+  $$\text{Branch}_{\text{True}}(x) \neq \text{Branch}_{\text{False}}(x)$$
+
+   This state discrepancy violates conservation rules. The compiler blocks compilation and provides clear diagnostics to prevent runtime state corruption.
 ---
 
 ## 4. SMT Solver Validation & LSP Diagnostics Integration
