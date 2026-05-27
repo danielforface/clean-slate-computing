@@ -67,7 +67,7 @@ AetherOS cuts away generic firmware interfaces, bootstrapping local x86_64 silic
 ### 1.2 Flat Contiguous Allocation and Zero-Copy Pipelines
 Dynamic virtual memory paging models introduce dynamic memory access fragmentation. AetherOS replaces runtime paging routines with a **Static Memory Distribution Paradigm**:
 
-* **Immutable Weight Alignment:** Large language model structures (such as `Llama-3.2-1B-Q4_K_M`), layer layer dimensions, tensor scale scales, and runtime sequence context buffers are loaded into continuous chunks of physical system RAM during boot-phase initialization.
+* **Immutable Weight Alignment:** Large language model structures (such as `Llama-3.2-1B-Q4_K_M`), layer layer dimensions, tensor scales, and runtime sequence context buffers are loaded into continuous chunks of physical system RAM during boot-phase initialization.
 * **Direct DMA Storage Streaming:** Model weight matrices are read sequentially from high-bandwidth non-volatile physical storage blocks (NVMe controller queues) and written directly into target RAM destination boundaries over the PCIe bus interface. The pipeline bypasses host file allocation tables and redundant kernel buffer copying:
 
 $$	ext{NVMe PCIe DMA Controller Registers} \longrightarrow 	ext{Contiguous Target Physical Allocation Base} \longrightarrow 	ext{Core Execution Cache Line Matrix}$$
